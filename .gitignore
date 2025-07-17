@@ -151,8 +151,6 @@ ignition/deployments/chain-50312
 .env
 .env.local
 
-lib/*
 cache_forge/*
 cache_forge
-lib
 forge-std
