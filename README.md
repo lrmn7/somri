@@ -32,6 +32,7 @@ Ini adalah DApp full-stack yang dibangun dengan Next.js, RainbowKit, Wagmi v2, d
 
 1.  **Siapkan Lingkungan Hardhat/Foundry:**
     Proyek ini tidak menyertakan file konfigurasi Hardhat. Anda perlu menyiapkannya secara terpisah.
+
     - Instal Hardhat: `pnpm add --save-dev hardhat @nomicfoundation/hardhat-toolbox`
     - Jalankan `npx hardhat` dan buat proyek TypeScript.
     - Pindahkan `contracts/MemoryGame.sol` ke direktori `contracts` Hardhat Anda.
@@ -40,29 +41,20 @@ Ini adalah DApp full-stack yang dibangun dengan Next.js, RainbowKit, Wagmi v2, d
 2.  **Buat Skrip Deploy:**
     Buat file di `scripts/deploy.ts` dalam proyek Hardhat Anda:
     ```typescript
-    import { ethers } from "hardhat";
+    import { buildModule } from "@nomicfoundation/hardhat-ignition/modules";
 
-    async function main() {
-      const initialRewardAmount = STTers.parseSTTer("0.01"); // 0.01 STT
-      const initialMinScore = 1000;
+const SomniaMemoryModule = buildModule("SomniaMemoryModule", (m) => {
+const initialMinScore = m.getParameter("\_initialMinScore", 1000);
+const SomniaMemory = m.contract("SomniaMemory", [initialMinScore]);
 
-      const memoryGame = await STTers.deployContract("MemoryGame", [
-        initialRewardAmount,
-        initialMinScore,
-      ]);
+return { SomniaMemory };
+});
 
-      await memoryGame.waitForDeployment();
-
-      console.log(`MemoryGame deployed to: ${memoryGame.target}`);
-    }
-
-    main().catch((error) => {
-      console.error(error);
-      process.exitCode = 1;
-    });
-    ```
+export default SomniaMemoryModule;
+```
 
 3.  **Deploy ke Testnet:**
+
     - Konfigurasikan file `hardhat.config.ts` Anda dengan URL RPC testnet dan private key deployer.
     - Jalankan skrip deploy: `npx hardhat run scripts/deploy.ts --network sepolia` (ganti `sepolia` dengan jaringan Anda).
 
@@ -72,12 +64,14 @@ Ini adalah DApp full-stack yang dibangun dengan Next.js, RainbowKit, Wagmi v2, d
 ### Langkah 2: Konfigurasi Frontend
 
 1.  **Clone Repositori:**
+
     ```bash
     git clone <URL_REPO_ANDA>
     cd <NAMA_REPO>
     ```
 
 2.  **Instal Dependensi:**
+
     ```bash
     pnpm install
     ```
@@ -94,6 +88,7 @@ Ini adalah DApp full-stack yang dibangun dengan Next.js, RainbowKit, Wagmi v2, d
 ### Langkah 3: Jalankan Aplikasi
 
 1.  **Jalankan Server Development:**
+
     ```bash
     pnpm dev
     ```
@@ -104,15 +99,18 @@ Ini adalah DApp full-stack yang dibangun dengan Next.js, RainbowKit, Wagmi v2, d
 ### Langkah 4: Interaksi dengan DApp
 
 1.  **Danai Kontrak (Sebagai Owner):**
+
     - Buka halaman `/admin`.
     - Hubungkan dengan wallet yang sama dengan yang Anda gunakan untuk deploy (wallet owner).
     - Gunakan form "Deposit" untuk mengirim STT testnet ke kontrak. Dana ini akan digunakan untuk hadiah.
 
 2.  **Mainkan Game:**
+
     - Buka halaman `/play`.
     - Selesaikan permainan. Jika skor Anda cukup tinggi, Anda akan melihat opsi untuk mengklaim hadiah.
 
 3.  **Klaim Hadiah:**
+
     - Klik tombol "Submit Score".
     - Jika skor Anda memenuhi syarat, klik tombol "Claim Reward".
 
