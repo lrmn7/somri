@@ -3,6 +3,11 @@ pragma solidity ^0.8.20;
 
 import "@openzeppelin/contracts/access/Ownable.sol";
 
+/**
+ * @title SomniaMemory - Just flip, match, and have fun! Rewards will follow!
+ * @dev L RMN
+ */
+
 contract SomniaMemory is Ownable {
     
     enum Difficulty { Easy, Medium, Hard }
