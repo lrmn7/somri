@@ -367,7 +367,7 @@ export default function HomePage() {
                           })
                         }
                         disabled={isSubmitting || isConfirmingScore}
-                        className="bg-brand-orange hover:bg-brand-orange-500 disabled:bg-gray-500 font-bold py-1.5 sm:px-5 rounded-lg text-lg"
+                        className="bg-brand-orange hover:bg-brand-orange-600 disabled:bg-gray-500 font-bold py-1.5 sm:px-5 rounded-lg text-lg"
                       >
                         {" "}
                         {isSubmitting
