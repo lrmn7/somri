@@ -6,8 +6,12 @@ const config: Config = {
     "./components/**/*.{js,ts,jsx,tsx,mdx}",
     "./app/**/*.{js,ts,jsx,tsx,mdx}",
   ],
+  darkMode: 'class', // ⬅️ enable dark mode via class
   theme: {
     extend: {
+      colors: {
+        'brand-orange': '#f97316',
+      },
       backgroundImage: {
         "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
         "gradient-conic":
@@ -17,4 +21,5 @@ const config: Config = {
   },
   plugins: [],
 };
+
 export default config;

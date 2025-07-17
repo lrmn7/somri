@@ -8,61 +8,82 @@ type CardProps = {
   imageUrl: string;
   isFlipped: boolean;
   isMatched: boolean;
-  isMissed: boolean; // <-- PROPS BARU DITERIMA DI SINI
+  isMissed: boolean;
   onCardClick: (uniqueId: number) => void;
 };
 
-// --> VARIANTS ANIMASI UNTUK KARTU <--
 const cardVariants: Variants = {
-  // Keadaan default (tertutup)
   closed: {
     rotateY: 0,
-    transition: { type: "tween", ease: "easeOut", duration: 0.4 }
+    transition: { type: "tween", ease: "easeOut", duration: 0.4 },
   },
-  // Keadaan terbuka
   opened: {
     rotateY: 180,
-    transition: { type: "tween", ease: "easeOut", duration: 0.4 }
+    transition: { type: "tween", ease: "easeOut", duration: 0.4 },
   },
-  // Keadaan salah pilih (bergoyang)
   missed: {
-    x: [0, -10, 10, -10, 10, 0], // Animasi goyang sumbu X
+    x: [0, -10, 10, -10, 10, 0],
     transition: { duration: 0.5 },
-  }
+  },
+  matched: {
+    rotateY: 180,
+    transition: { type: "tween", ease: "easeOut", duration: 0.4 },
+  },
 };
 
-export function Card({ id, uniqueId, imageUrl, isFlipped, isMatched, isMissed, onCardClick }: CardProps) {
+export function Card({
+  id,
+  uniqueId,
+  imageUrl,
+  isFlipped,
+  isMatched,
+  isMissed,
+  onCardClick,
+}: CardProps) {
   const handleClick = () => {
     if (!isFlipped && !isMatched) {
       onCardClick(uniqueId);
     }
   };
-  
-  // Menentukan animasi mana yang harus dijalankan
+
   const getAnimationState = () => {
-    if(isMissed) return "missed";
-    if(isFlipped || isMatched) return "opened";
+    if (isMatched) return "matched";
+    if (isMissed) return "missed";
+    if (isFlipped) return "opened";
     return "closed";
-  }
+  };
 
   return (
     <div
-      className="relative w-24 h-36 md:w-32 md:h-48 cursor-pointer [perspective:1000px]"
+      className="relative w-20 h-28 sm:w-24 sm:h-36 lg:w-32 lg:h-44 cursor-pointer [perspective:1000px]"
       onClick={handleClick}
     >
       <motion.div
         className="relative w-full h-full [transform-style:preserve-3d]"
         initial={false}
-        variants={cardVariants} // Gunakan variants yang sudah didefinisikan
-        animate={getAnimationState()} // Pilih state animasi secara dinamis
+        variants={cardVariants}
+        animate={getAnimationState()}
       >
-        {/* Card Back */}
-        <div className="absolute w-full h-full [backface-visibility:hidden]">
-          <Image src="/cards/card-back.png" alt="Card Back" layout="fill" className="object-cover rounded-lg shadow-lg" />
-        </div>
+        {/* Card Back hanya ditampilkan jika belum matched */}
+        {!isMatched && (
+          <div className="absolute w-full h-full [backface-visibility:hidden]">
+            <Image
+              src="/cards/card-back.png"
+              alt="Card Back"
+              layout="fill"
+              className="object-cover rounded-lg shadow-lg"
+            />
+          </div>
+        )}
+
         {/* Card Front */}
         <div className="absolute w-full h-full [backface-visibility:hidden] [transform:rotateY(180deg)]">
-          <Image src={imageUrl} alt={`Card ${id}`} layout="fill" className="object-cover rounded-lg shadow-lg" />
+          <Image
+            src={imageUrl}
+            alt={`Card ${id}`}
+            layout="fill"
+            className="object-cover rounded-lg shadow-lg"
+          />
         </div>
       </motion.div>
     </div>
