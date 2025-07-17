@@ -491,12 +491,21 @@ export default function HomePage() {
             </button>
           )}
         </div>
-        <div className="w-full lg:max-w-md flex-shrink-0">
-          <h2 className="text-3xl text-brand-orange font-bold text-center mb-4">
-            Leaderboard
-          </h2>
-          <LeaderboardTable />
-        </div>
+<div className="w-full lg:max-w-md flex-shrink-0">
+  <h2 className="text-3xl text-brand-orange font-bold text-center mb-4">
+    Leaderboard
+  </h2>
+
+  {/* reward explanation */}
+  <p className="text-sm text-gray-400 text-center mb-2">
+    🎯 Reach at least <span className="font-semibold text-brand-orange">1000 points</span> to claim rewards
+    <br />
+    Easy: <span className="text-brand-orange">1 STT</span>, Medium: <span className="text-brand-orange">1.5 STT</span>, Hard: <span className="text-brand-orange">2 STT</span>
+  </p>
+
+  <LeaderboardTable />
+</div>
+
       </div>
     </div>
   );
