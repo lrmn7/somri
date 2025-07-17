@@ -35,6 +35,47 @@ const cardImages = [
   { id: 18, name: "18.png" },
   { id: 19, name: "19.png" },
   { id: 20, name: "20.png" },
+  { id: 21, name: "21.png" },
+  { id: 22, name: "22.png" },
+  { id: 23, name: "23.png" },
+  { id: 24, name: "24.png" },
+  { id: 25, name: "25.png" },
+  { id: 26, name: "26.png" },
+  { id: 27, name: "27.png" },
+  { id: 28, name: "28.png" },
+  { id: 29, name: "29.png" },
+  { id: 30, name: "30.png" },
+  { id: 31, name: "31.png" },
+  { id: 32, name: "32.png" },
+  { id: 33, name: "33.png" },
+  { id: 34, name: "34.png" },
+  { id: 35, name: "35.png" },
+  { id: 36, name: "36.png" },
+  { id: 37, name: "37.png" },
+  { id: 38, name: "38.png" },
+  { id: 39, name: "39.png" },
+  { id: 40, name: "40.png" },
+  { id: 41, name: "41.png" },
+  { id: 42, name: "42.png" },
+  { id: 43, name: "43.png" },
+  { id: 44, name: "44.png" },
+  { id: 45, name: "45.png" },
+  { id: 46, name: "46.png" },
+  { id: 47, name: "47.png" },
+  { id: 48, name: "48.png" },
+  { id: 49, name: "49.png" },
+  { id: 50, name: "50.png" },
+  { id: 51, name: "51.png" },
+  { id: 52, name: "52.png" },
+  { id: 53, name: "53.png" },
+  { id: 54, name: "54.png" },
+  { id: 55, name: "55.png" },
+  { id: 56, name: "56.png" },
+  { id: 57, name: "57.png" },
+  { id: 58, name: "58.png" },
+  { id: 59, name: "59.png" },
+  { id: 60, name: "60.png" },
+  { id: 61, name: "61.png" },
 ];
 type CardType = {
   id: number;
@@ -49,9 +90,18 @@ enum Difficulty {
   Hard,
 }
 const difficultySettings = {
-  [Difficulty.Easy]: { pairs: 4, grid: "grid-cols-4" },
-  [Difficulty.Medium]: { pairs: 6, grid: "grid-cols-4" },
-  [Difficulty.Hard]: { pairs: 9, grid: "grid-cols-4 md:grid-cols-6" },
+  [Difficulty.Easy]: {
+    pairs: { mobile: 3, desktop: 4 },
+    grid: "grid-cols-3 sm:grid-cols-4",
+  },
+  [Difficulty.Medium]: {
+    pairs: { mobile: 6, desktop: 6 },
+    grid: "grid-cols-3 sm:grid-cols-4",
+  },
+  [Difficulty.Hard]: {
+    pairs: { mobile: 9, desktop: 9 },
+    grid: "grid-cols-3 sm:grid-cols-4 md:grid-cols-6",
+  },
 };
 const scoreSettings = {
   [Difficulty.Easy]: { maxScore: 500, timePenalty: 2, attemptPenalty: 10 },
@@ -83,6 +133,8 @@ const formatTime = (totalSeconds: number): string => {
 
 export default function HomePage() {
   const [isMounted, setIsMounted] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
+
   type GamePhase =
     | "difficulty_select"
     | "payment"
@@ -124,12 +176,23 @@ export default function HomePage() {
 
   useEffect(() => {
     setIsMounted(true);
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 768); // Adjust breakpoint as needed for mobile
+    };
+    window.addEventListener("resize", handleResize);
+    handleResize(); // Set initial value
+    return () => window.removeEventListener("resize", handleResize);
   }, []);
+
   const setupGame = (selectedDifficulty: Difficulty) => {
     setDifficulty(selectedDifficulty);
-    setCards(createShuffledDeck(difficultySettings[selectedDifficulty].pairs));
+    const pairCount = isMobile
+      ? difficultySettings[selectedDifficulty].pairs.mobile
+      : difficultySettings[selectedDifficulty].pairs.desktop;
+    setCards(createShuffledDeck(pairCount));
     setGamePhase("payment");
   };
+
   const resetGame = useCallback(() => {
     setGamePhase("difficulty_select");
     setFlippedCards([]);
@@ -141,15 +204,21 @@ export default function HomePage() {
     resetPay();
     resetSubmitScore();
   }, [resetPay, resetSubmitScore]);
+
   useEffect(() => {
-    setCards(createShuffledDeck(difficultySettings[Difficulty.Easy].pairs));
-  }, []);
+    const initialPairCount = isMobile
+      ? difficultySettings[Difficulty.Easy].pairs.mobile
+      : difficultySettings[Difficulty.Easy].pairs.desktop;
+    setCards(createShuffledDeck(initialPairCount));
+  }, [isMobile]); // Re-shuffle on mobile state change
+
   useEffect(() => {
     if (hasPaid) {
       toast.success("Payment successful!");
       setGamePhase("countdown");
     }
   }, [hasPaid]);
+
   useEffect(() => {
     if (gamePhase === "countdown" && countdown > 0) {
       const timer = setTimeout(() => setCountdown((c) => c - 1), 1000);
@@ -158,6 +227,7 @@ export default function HomePage() {
       setGamePhase("playing");
     }
   }, [gamePhase, countdown]);
+
   useEffect(() => {
     let timer: NodeJS.Timeout;
     if (isMounted && isConnected && gamePhase === "playing") {
@@ -168,6 +238,7 @@ export default function HomePage() {
     }
     return () => clearInterval(timer);
   }, [gamePhase, isConnected, isMounted]);
+
   const handleCardClick = (uniqueId: number) => {
     if (
       gamePhase !== "playing" ||
@@ -183,6 +254,7 @@ export default function HomePage() {
     );
     setFlippedCards((prev) => [...prev, uniqueId]);
   };
+
   useEffect(() => {
     if (gamePhase !== "playing" || flippedCards.length !== 2) return;
     const [firstId, secondId] = flippedCards;
@@ -220,6 +292,7 @@ export default function HomePage() {
     }, 600);
     return () => clearTimeout(checkTimeout);
   }, [flippedCards, cards, gamePhase]);
+
   useEffect(() => {
     const allMatched = cards.length > 0 && cards.every((c) => c.isMatched);
     if (gamePhase === "playing" && allMatched) {
@@ -301,19 +374,35 @@ export default function HomePage() {
                         onClick={() => setupGame(Difficulty.Easy)}
                         className="bg-green-600 hover:bg-green-700 px-4 py-1.5 sm:px-5 sm:py-2 text-sm rounded-lg font-bold"
                       >
-                        Easy (8 Cards)
+                        Easy (
+                        {isMobile
+                          ? difficultySettings[Difficulty.Easy].pairs.mobile * 2
+                          : difficultySettings[Difficulty.Easy].pairs
+                              .desktop * 2}{" "}
+                        Cards)
                       </button>
                       <button
                         onClick={() => setupGame(Difficulty.Medium)}
                         className="bg-yellow-600 hover:bg-yellow-700 px-4 py-1.5 sm:px-5 sm:py-2 text-sm rounded-lg font-bold"
                       >
-                        Medium (12 Cards)
+                        Medium (
+                        {isMobile
+                          ? difficultySettings[Difficulty.Medium].pairs.mobile *
+                            2
+                          : difficultySettings[Difficulty.Medium].pairs
+                              .desktop * 2}{" "}
+                        Cards)
                       </button>
                       <button
                         onClick={() => setupGame(Difficulty.Hard)}
                         className="bg-red-600 hover:bg-red-700 px-4 py-1.5 sm:px-5 sm:py-2 text-sm rounded-lg font-bold"
                       >
-                        Hard (16 Cards)
+                        Hard (
+                        {isMobile
+                          ? difficultySettings[Difficulty.Hard].pairs.mobile * 2
+                          : difficultySettings[Difficulty.Hard].pairs
+                              .desktop * 2}{" "}
+                        Cards)
                       </button>
                     </div>
                   </>
@@ -348,7 +437,7 @@ export default function HomePage() {
                   </div>
                 ) : gamePhase === "won" ? (
                   <div className="w-full max-w-md">
-                    <h2 className="text-3xl md:text-4xl font-bold text-brand-orange mb-2">
+                    <h2 className="text-2xl md:text-4xl font-bold text-brand-orange mb-2">
                       Congratulations!
                     </h2>
                     <p className="text-lg md:text-xl mb-4">
