@@ -282,7 +282,7 @@ export default function HomePage() {
               ))}
             </div>
             {gamePhase !== "playing" && (
-              <div className="absolute inset-0 bg-black bg-opacity-5 flex flex-col items-center justify-center z-10 backdrop-blur-sm text-white p-4 text-center">
+              <div className="absolute inset-0 bg-black bg-opacity-50 flex flex-col items-center justify-center z-10 backdrop-blur-sm text-white p-4 text-center">
                 {!isConnected ? (
                   <>
                     {" "}
@@ -348,7 +348,7 @@ export default function HomePage() {
                   </div>
                 ) : gamePhase === "won" ? (
                   <div className="w-full max-w-md">
-                    <h2 className="text-3xl md:text-4xl font-bold text-green-400 mb-2">
+                    <h2 className="text-3xl md:text-4xl font-bold text-brand-orange mb-2">
                       Congratulations!
                     </h2>
                     <p className="text-lg md:text-xl mb-4">
@@ -367,7 +367,7 @@ export default function HomePage() {
                           })
                         }
                         disabled={isSubmitting || isConfirmingScore}
-                        className="bg-brand-orange hover:bg-brand-orange-600 disabled:bg-gray-500 font-bold py-1.5 sm:px-5 rounded-lg text-lg"
+                        className="bg-brand-orange hover:bg-brand-orange-600 disabled:bg-gray-500 font-bold px-4 py-1.5 sm:px-5 sm:py-2 rounded-lg text-lg"
                       >
                         {" "}
                         {isSubmitting
@@ -379,7 +379,7 @@ export default function HomePage() {
                     ) : (
                       <div className="mt-4">
                         {" "}
-                        <p className="text-green-400 mb-2 font-semibold">
+                        <p className="text-brand-orange mb-2 font-semibold">
                           ✅ Score Submitted!
                         </p>{" "}
                         <ClaimReward
