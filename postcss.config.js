@@ -6,4 +6,4 @@ const config = {
   },
 };
 
-module.exports = config; // <-- Ganti baris ini
+module.exports = config;

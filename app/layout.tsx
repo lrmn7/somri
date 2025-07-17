@@ -4,36 +4,36 @@ import "./globals.css";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import '@rainbow-me/rainbowkit/styles.css';
-import dynamic from "next/dynamic"; // ✨ Impor 'dynamic'
+import dynamic from "next/dynamic";
 
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "SOMT👀L",
-  description: "All your Somnia Testnet essentials in one place: faucet, multi-sender, and contract deployment.",
+  title: "SOMRI",
+  description: "Just flip, match, and have fun! Rewards will follow!",
   keywords: "Somnia, Somnia Network, Testnet, Faucet, ERC20, ERC721, Multi-sender, Blockchain Tools, dApp, Web3, Smart Contract Deployment, Test Tokens, Crypto",
   authors: [{ name: "L RMN", url: "https://lrmn.link" }],
   creator: "L RMN",
   publisher: "L RMN",
   alternates: {
-    canonical: "https://somtool.vercel.app/",
+    canonical: "https://somri.vercel.app/",
   },
   icons: {
-    icon: "/somtool.png",
-    shortcut: "/somtool.png",
-    apple: "/somtool.png",
+    icon: "/somri.png",
+    shortcut: "/somri.png",
+    apple: "/somri.png",
   },
   openGraph: {
-    title: "Your Somnia Testnet Toolkit",
-    description: "All your Somnia Testnet essentials in one place: faucet, multi-sender, and contract deployment.",
-    url: "https://somtool.vercel.app/",
-    siteName: "SOMT👀L",
+    title: "SOMNIA MEMORY GAME",
+    description: "Just flip, match, and have fun! Rewards will follow!",
+    url: "https://somri.vercel.app/",
+    siteName: "SOMRI",
     images: [
       {
-        url: "https://somtool.vercel.app/og-image.png",
+        url: "https://somri.vercel.app/somri-og.png",
         width: 1200,
         height: 630,
-        alt: "SOMT👀L - Somnia Testnet Toolkit Screenshot",
+        alt: "SOMRI - SOMNIA MEMORY GAME",
       },
     ],
     locale: "en_US",
@@ -43,10 +43,10 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     site: "@romanromannya",
     creator: "@romanromannya",
-    title: "SOMTOOL: Empower Your Somnia Testnet Development",
-    description: "All your Somnia Testnet essentials in one place: faucet, multi-sender, and contract deployment.",
+    title: "SOMRI: Just flip, match, and have fun! Rewards will follow!",
+    description: "Just flip, match, and have fun! Rewards will follow!",
     // ✨ URL gambar diperbarui
-    images: ["https://somtool.vercel.app/og-image.png"],
+    images: ["https://somri.vercel.app/somri-og.png"],
   },
   robots: {
     index: true,

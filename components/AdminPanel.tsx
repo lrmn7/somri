@@ -4,15 +4,11 @@ import { contractConfig } from '@/lib/config';
 import { formatEther, parseEther } from 'viem';
 import { useState, useEffect } from 'react';
 import toast from 'react-hot-toast';
-
-// Enum difficulty agar konsisten dengan frontend dan smart contract
 enum Difficulty { Easy, Medium, Hard }
 
 export function AdminPanel() {
   const { address, isConnected } = useAccount();
   const { data: contractBalance, refetch: refetchBalance } = useBalance({ address: contractConfig.address });
-
-  // ✨ Pola Baru: Gunakan `useReadContract` langsung untuk setiap data
   const { data: owner } = useReadContract({ ...contractConfig, functionName: 'owner' });
   const { data: minScore, refetch: refetchMinScore } = useReadContract({ ...contractConfig, functionName: 'minScoreForReward' });
   const { data: playFee, refetch: refetchPlayFee } = useReadContract({ ...contractConfig, functionName: 'playFee' });
@@ -26,18 +22,12 @@ export function AdminPanel() {
   const [newMinScore, setNewMinScore] = useState('');
   const [depositValue, setDepositValue] = useState('');
   const [withdrawValue, setWithdrawValue] = useState('');
-
-  // ✨ Pola Baru: Cukup satu `useWriteContract` untuk semua aksi tulis
   const { data: hash, writeContract, isPending, error } = useWriteContract();
-  
-  // Lacak status konfirmasi transaksi
   const { isLoading: isConfirming, isSuccess: isConfirmed } = useWaitForTransactionReceipt({ hash });
 
-  // Efek untuk notifikasi dan me-refresh data setelah transaksi berhasil
   useEffect(() => {
     if (isConfirmed) {
       toast.success('Transaction confirmed!');
-      // Refresh semua data yang mungkin berubah
       refetchBalance(); refetchPlayFee(); refetchEasyReward(); refetchMediumReward(); refetchHardReward(); refetchMinScore();
     }
     if (error) {
@@ -51,7 +41,6 @@ export function AdminPanel() {
   if (!owner) return <p>Loading contract data...</p>;
   if (!isOwner) return <p className="text-red-500">You are not the owner.</p>;
   
-  // ✨ Pola Baru: Panggil `writeContract` dengan konfigurasi lengkap
   const handleSetPlayFee = () => {
     if (!newPlayFee || parseFloat(newPlayFee) < 0) return toast.error('Invalid fee');
     writeContract({ ...contractConfig, functionName: 'setPlayFee', args: [parseEther(newPlayFee)] });

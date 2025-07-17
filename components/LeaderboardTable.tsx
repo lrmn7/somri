@@ -8,10 +8,9 @@ export function LeaderboardTable() {
   const { data: leaderboardData, isLoading, error, refetch } = useReadContract({
     ...contractConfig,
     functionName: 'getTopScores',
-    args: [BigInt(10)], // Ambil 10 pemain teratas
+    args: [BigInt(10)],
   });
 
-  // Refresh data papan peringkat setiap 30 detik
   useEffect(() => {
     const interval = setInterval(() => {
       refetch();
@@ -22,7 +21,6 @@ export function LeaderboardTable() {
   if (isLoading) return <p className="text-center">Loading leaderboard...</p>;
   if (error) return <p className="text-center text-red-500">Error fetching leaderboard: {error.message}</p>;
   
-  // Logika baru untuk menangani format data [address[], uint256[]]
   const players = leaderboardData?.[0];
   const scores = leaderboardData?.[1];
 

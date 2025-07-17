@@ -9,7 +9,6 @@ export function Navbar() {
     <header className="sticky top-0 z-50 w-full border-b border-gray-700 bg-gray-900 backdrop-blur-sm">
       <nav className="container mx-auto flex h-16 items-center justify-between px-4">
         <Link href="/" className="flex items-center w-[60px] md:w-auto">
-          {/* Mobile: kosong, MD+: tampilkan logo */}
           <div className="block md:hidden" />
           <Image
             src="/somri.png"

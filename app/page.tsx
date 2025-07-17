@@ -254,7 +254,7 @@ export default function HomePage() {
       <div className="flex flex-col lg:flex-row gap-8 lg:gap-12 items-start justify-center w-full">
         <div className="flex flex-col items-center gap-4 w-full lg:w-auto">
           {gamePhase === "playing" && (
-            <div className="flex gap-8 text-lg bg-gray-800 px-6 py-3 rounded-lg w-full justify-center">
+            <div className="flex gap-8 text-lg bg-transparent px-6 py-3 rounded-lg w-full justify-center">
               <div>
                 Attempts:{" "}
                 <span className="font-bold text-yellow-300">{attempts}</span>
@@ -281,8 +281,6 @@ export default function HomePage() {
                 />
               ))}
             </div>
-
-            {/* ✨ Perbaikan Overlay: hapus 'rounded-lg' dari sini */}
             {gamePhase !== "playing" && (
               <div className="absolute inset-0 bg-black bg-opacity-5 flex flex-col items-center justify-center z-10 backdrop-blur-sm text-white p-4 text-center">
                 {!isConnected ? (
@@ -298,7 +296,6 @@ export default function HomePage() {
                     <h2 className="text-2xl md:text-3xl font-bold mb-6">
                       Pick Card Count
                     </h2>
-                    {/* ✨ Perbaikan Tombol: ukuran dibuat responsive */}
                     <div className="flex flex-col sm:flex-row flex-wrap justify-center gap-4">
                       <button
                         onClick={() => setupGame(Difficulty.Easy)}

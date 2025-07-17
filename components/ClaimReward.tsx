@@ -21,7 +21,6 @@ export function ClaimReward({ userScore, difficulty }: ClaimRewardProps) {
   const { data: hasClaimed, refetch } = useReadContract({ ...contractConfig, functionName: 'hasClaimedReward', args: [address, difficulty] });
 
   const { data: hash, writeContract, isPending } = useWriteContract();
-  // ✨ Ambil `isLoading` sebagai `isConfirming`
   const { isLoading: isConfirming, isSuccess: isConfirmed } = useWaitForTransactionReceipt({ hash });
 
   useEffect(() => { if (isConfirmed) { refetch(); } }, [isConfirmed, refetch]);
@@ -40,7 +39,6 @@ export function ClaimReward({ userScore, difficulty }: ClaimRewardProps) {
       </p>
       <button
         onClick={() => writeContract({ ...contractConfig, functionName: 'claimReward', args: [difficulty] })}
-        // ✨ Logika `disabled` diperbarui untuk mencakup isConfirming
         disabled={!canClaim || isPending || isConfirming || isConfirmed}
         className="mt-2 bg-green-600 hover:bg-green-700 disabled:bg-gray-500 text-white font-bold py-2 px-4 rounded transition-colors"
       >
