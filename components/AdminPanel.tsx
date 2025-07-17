@@ -70,26 +70,26 @@ export function AdminPanel() {
       
       {/* Tampilan status */}
       <div className="grid grid-cols-2 md:grid-cols-3 gap-4 text-center">
-        <div className="bg-gray-700 p-4 rounded-lg"><p className="text-sm text-gray-400">Balance</p><p className="text-xl font-bold">{contractBalance ? `${parseFloat(contractBalance.formatted).toFixed(4)} ETH` : '...'}</p></div>
-        <div className="bg-gray-700 p-4 rounded-lg"><p className="text-sm text-gray-400">Play Fee</p><p className="text-xl font-bold">{playFee !== undefined ? `${formatEther(playFee as bigint)} ETH` : '...'}</p></div>
+        <div className="bg-gray-700 p-4 rounded-lg"><p className="text-sm text-gray-400">Balance</p><p className="text-xl font-bold">{contractBalance ? `${parseFloat(contractBalance.formatted).toFixed(4)} STT` : '...'}</p></div>
+        <div className="bg-gray-700 p-4 rounded-lg"><p className="text-sm text-gray-400">Play Fee</p><p className="text-xl font-bold">{playFee !== undefined ? `${formatEther(playFee as bigint)} STT` : '...'}</p></div>
         <div className="bg-gray-700 p-4 rounded-lg"><p className="text-sm text-gray-400">Min Score</p><p className="text-xl font-bold">{minScore !== undefined ? (minScore as bigint).toString() : '...'}</p></div>
-        <div className="bg-green-900/50 p-4 rounded-lg"><p className="text-sm text-green-300">Easy Reward</p><p className="text-xl font-bold">{easyReward !== undefined ? `${formatEther(easyReward as bigint)} ETH` : '...'}</p></div>
-        <div className="bg-yellow-900/50 p-4 rounded-lg"><p className="text-sm text-yellow-300">Medium Reward</p><p className="text-xl font-bold">{mediumReward !== undefined ? `${formatEther(mediumReward as bigint)} ETH` : '...'}</p></div>
-        <div className="bg-red-900/50 p-4 rounded-lg"><p className="text-sm text-red-300">Hard Reward</p><p className="text-xl font-bold">{hardReward !== undefined ? `${formatEther(hardReward as bigint)} ETH` : '...'}</p></div>
+        <div className="bg-green-900/50 p-4 rounded-lg"><p className="text-sm text-green-300">Easy Reward</p><p className="text-xl font-bold">{easyReward !== undefined ? `${formatEther(easyReward as bigint)} STT` : '...'}</p></div>
+        <div className="bg-yellow-900/50 p-4 rounded-lg"><p className="text-sm text-yellow-300">Medium Reward</p><p className="text-xl font-bold">{mediumReward !== undefined ? `${formatEther(mediumReward as bigint)} STT` : '...'}</p></div>
+        <div className="bg-red-900/50 p-4 rounded-lg"><p className="text-sm text-red-300">Hard Reward</p><p className="text-xl font-bold">{hardReward !== undefined ? `${formatEther(hardReward as bigint)} STT` : '...'}</p></div>
       </div>
 
       {/* Panel Aksi */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
         <div className="space-y-4 bg-gray-900/50 p-4 rounded-lg">
           <h3 className="text-xl font-semibold">Game Settings</h3>
-          <div className="flex gap-2"><input type="number" value={newPlayFee} onChange={e => setNewPlayFee(e.target.value)} placeholder="New Play Fee (ETH)" className="input-field" /><button onClick={handleSetPlayFee} disabled={isPending} className="btn-primary w-40">{isPending ? 'Pending...' : 'Set Fee'}</button></div>
-          <div className="flex gap-2"><select onChange={(e) => setSelectedDifficulty(Number(e.target.value))} className="input-field"><option value={Difficulty.Easy}>Easy</option><option value={Difficulty.Medium}>Medium</option><option value={Difficulty.Hard}>Hard</option></select><input type="number" value={newRewardAmount} onChange={e => setNewRewardAmount(e.target.value)} placeholder="New Reward (ETH)" className="input-field" /><button onClick={handleSetRewardAmount} disabled={isPending} className="btn-primary w-48">{isPending ? 'Pending...' : 'Set Reward'}</button></div>
+          <div className="flex gap-2"><input type="number" value={newPlayFee} onChange={e => setNewPlayFee(e.target.value)} placeholder="New Play Fee (STT)" className="input-field" /><button onClick={handleSetPlayFee} disabled={isPending} className="btn-primary w-40">{isPending ? 'Pending...' : 'Set Fee'}</button></div>
+          <div className="flex gap-2"><select onChange={(e) => setSelectedDifficulty(Number(e.target.value))} className="input-field"><option value={Difficulty.Easy}>Easy</option><option value={Difficulty.Medium}>Medium</option><option value={Difficulty.Hard}>Hard</option></select><input type="number" value={newRewardAmount} onChange={e => setNewRewardAmount(e.target.value)} placeholder="New Reward (STT)" className="input-field" /><button onClick={handleSetRewardAmount} disabled={isPending} className="btn-primary w-48">{isPending ? 'Pending...' : 'Set Reward'}</button></div>
           <div className="flex gap-2"><input type="number" value={newMinScore} onChange={e => setNewMinScore(e.target.value)} placeholder="New Min Score" className="input-field" /><button onClick={handleSetMinScore} disabled={isPending} className="btn-primary w-48">{isPending ? 'Pending...' : 'Set Min Score'}</button></div>
         </div>
         <div className="space-y-4 bg-gray-900/50 p-4 rounded-lg">
           <h3 className="text-xl font-semibold">Funds Management</h3>
-          <div className="flex gap-2"><input type="number" value={depositValue} onChange={e => setDepositValue(e.target.value)} placeholder="Amount to Deposit (ETH)" className="input-field" /><button onClick={handleDeposit} disabled={isPending} className="btn-primary w-40">{isPending ? 'Pending...' : 'Deposit'}</button></div>
-          <div className="flex gap-2"><input type="number" value={withdrawValue} onChange={e => setWithdrawValue(e.target.value)} placeholder="Amount to Withdraw (ETH)" className="input-field" /><button onClick={handleWithdraw} disabled={isPending} className="btn-secondary w-40">{isPending ? 'Pending...' : 'Withdraw'}</button></div>
+          <div className="flex gap-2"><input type="number" value={depositValue} onChange={e => setDepositValue(e.target.value)} placeholder="Amount to Deposit (STT)" className="input-field" /><button onClick={handleDeposit} disabled={isPending} className="btn-primary w-40">{isPending ? 'Pending...' : 'Deposit'}</button></div>
+          <div className="flex gap-2"><input type="number" value={withdrawValue} onChange={e => setWithdrawValue(e.target.value)} placeholder="Amount to Withdraw (STT)" className="input-field" /><button onClick={handleWithdraw} disabled={isPending} className="btn-secondary w-40">{isPending ? 'Pending...' : 'Withdraw'}</button></div>
         </div>
       </div>
     </div>

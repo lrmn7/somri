@@ -1,12 +1,12 @@
 # Web3 Memory Game DApp
 
-Ini adalah DApp full-stack yang dibangun dengan Next.js, RainbowKit, Wagmi v2, dan Solidity. Pemain dapat memainkan permainan memori, mengirimkan skor mereka secara on-chain, dan mengklaim hadiah ETH jika skor mereka cukup tinggi.
+Ini adalah DApp full-stack yang dibangun dengan Next.js, RainbowKit, Wagmi v2, dan Solidity. Pemain dapat memainkan permainan memori, mengirimkan skor mereka secara on-chain, dan mengklaim hadiah STT jika skor mereka cukup tinggi.
 
 ## 🚀 Fitur
 
 - **Permainan Memori:** Permainan kartu berbasis gambar klasik.
 - **Skor On-Chain:** Skor akhir dihitung berdasarkan waktu dan upaya, lalu disimpan di blockchain.
-- **Hadiah Kripto:** Pemain yang memenuhi syarat dapat mengklaim hadiah ETH.
+- **Hadiah Kripto:** Pemain yang memenuhi syarat dapat mengklaim hadiah STT.
 - **Papan Peringkat:** Menampilkan 10 pemain teratas secara on-chain.
 - **Panel Admin:** Pemilik kontrak dapat mengelola dana dan pengaturan permainan.
 - **Integrasi Web3 Modern:** Menggunakan Next.js App Router, RainbowKit, dan Wagmi v2 untuk pengalaman pengguna yang mulus.
@@ -26,7 +26,7 @@ Ini adalah DApp full-stack yang dibangun dengan Next.js, RainbowKit, Wagmi v2, d
 - [Node.js](https://nodejs.org/en/) (v18 atau lebih baru)
 - [pnpm](https://pnpm.io/) (direkomendasikan) atau npm/yarn
 - Wallet browser seperti [MetaMask](https://metamask.io/)
-- ETH Testnet (misalnya dari [Sepolia Faucet](https://sepoliafaucet.com/))
+- STT Testnet (misalnya dari [Sepolia Faucet](https://sepoliafaucet.com/))
 
 ### Langkah 1: Deploy Smart Contract
 
@@ -43,10 +43,10 @@ Ini adalah DApp full-stack yang dibangun dengan Next.js, RainbowKit, Wagmi v2, d
     import { ethers } from "hardhat";
 
     async function main() {
-      const initialRewardAmount = ethers.parseEther("0.01"); // 0.01 ETH
+      const initialRewardAmount = STTers.parseSTTer("0.01"); // 0.01 STT
       const initialMinScore = 1000;
 
-      const memoryGame = await ethers.deployContract("MemoryGame", [
+      const memoryGame = await STTers.deployContract("MemoryGame", [
         initialRewardAmount,
         initialMinScore,
       ]);
@@ -106,7 +106,7 @@ Ini adalah DApp full-stack yang dibangun dengan Next.js, RainbowKit, Wagmi v2, d
 1.  **Danai Kontrak (Sebagai Owner):**
     - Buka halaman `/admin`.
     - Hubungkan dengan wallet yang sama dengan yang Anda gunakan untuk deploy (wallet owner).
-    - Gunakan form "Deposit" untuk mengirim ETH testnet ke kontrak. Dana ini akan digunakan untuk hadiah.
+    - Gunakan form "Deposit" untuk mengirim STT testnet ke kontrak. Dana ini akan digunakan untuk hadiah.
 
 2.  **Mainkan Game:**
     - Buka halaman `/play`.
