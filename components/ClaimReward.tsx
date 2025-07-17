@@ -10,52 +10,26 @@ type ClaimRewardProps = {
 };
 
 export function ClaimReward({ userScore, difficulty }: ClaimRewardProps) {
-  // ✨ Ambil isConnected dan address di paling atas
   const { address, isConnected } = useAccount();
 
-  // ✨ KUNCI PERBAIKAN: JIKA TIDAK KONEK ATAU ADDRESS BELUM ADA, JANGAN LANJUTKAN ✨
-  // Ini memberitahu TypeScript bahwa semua kode di bawah ini PASTI memiliki 'address'.
   if (!isConnected || !address) {
     return <p className="text-gray-500 mt-4">Connect your wallet to see reward status.</p>;
   }
 
-  // Semua hook di bawah ini sekarang dijamin aman karena 'address' pasti ada.
-  const { data: minScore } = useReadContract({ 
-    ...contractConfig, 
-    functionName: 'minScoreForReward' 
-  });
-
-  const { data: rewardAmount } = useReadContract({ 
-    ...contractConfig, 
-    functionName: 'rewardAmounts', 
-    args: [difficulty] 
-  });
-
-  // Kita tidak lagi butuh 'enabled: !!address' karena sudah di-handle di atas
-  const { data: hasClaimed, refetch } = useReadContract({ 
-    ...contractConfig, 
-    functionName: 'hasClaimedReward', 
-    args: [address, difficulty],
-  });
+  const { data: minScore } = useReadContract({ ...contractConfig, functionName: 'minScoreForReward' });
+  const { data: rewardAmount } = useReadContract({ ...contractConfig, functionName: 'rewardAmounts', args: [difficulty] });
+  const { data: hasClaimed, refetch } = useReadContract({ ...contractConfig, functionName: 'hasClaimedReward', args: [address, difficulty] });
 
   const { data: hash, writeContract, isPending } = useWriteContract();
-  const { isSuccess: isConfirmed } = useWaitForTransactionReceipt({ hash });
+  // ✨ Ambil `isLoading` sebagai `isConfirming`
+  const { isLoading: isConfirming, isSuccess: isConfirmed } = useWaitForTransactionReceipt({ hash });
 
-  useEffect(() => {
-    if (isConfirmed) {
-      refetch();
-    }
-  }, [isConfirmed, refetch]);
+  useEffect(() => { if (isConfirmed) { refetch(); } }, [isConfirmed, refetch]);
 
   const canClaim = !hasClaimed && userScore >= (minScore as bigint || 0);
 
-  if (userScore < (minScore as bigint || 0)) {
-    return null;
-  }
-  
-  if (hasClaimed) {
-    return <p className="text-green-400 mt-4">Reward for this difficulty has been claimed!</p>;
-  }
+  if (userScore < (minScore as bigint || 0)) return null;
+  if (hasClaimed) return <p className="text-green-400 mt-4">Reward for this difficulty has been claimed!</p>;
 
   return (
     <div className="mt-4 border-t border-gray-600 pt-4">
@@ -66,10 +40,14 @@ export function ClaimReward({ userScore, difficulty }: ClaimRewardProps) {
       </p>
       <button
         onClick={() => writeContract({ ...contractConfig, functionName: 'claimReward', args: [difficulty] })}
-        disabled={!canClaim || isPending || isConfirmed}
+        // ✨ Logika `disabled` diperbarui untuk mencakup isConfirming
+        disabled={!canClaim || isPending || isConfirming || isConfirmed}
         className="mt-2 bg-green-600 hover:bg-green-700 disabled:bg-gray-500 text-white font-bold py-2 px-4 rounded transition-colors"
       >
-        {isPending ? 'Claiming...' : isConfirmed ? 'Claimed!' : 'Claim Reward'}
+        {isPending && 'Waiting for confirmation...'}
+        {isConfirming && 'Claiming on blockchain...'}
+        {isConfirmed && 'Claimed!'}
+        {!isPending && !isConfirming && !isConfirmed && 'Claim Reward'}
       </button>
     </div>
   );
