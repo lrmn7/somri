@@ -1,46 +1,75 @@
 "use client";
-import { useAccount } from 'wagmi';
-import { useReadMemoryGame, useWriteMemoryGame } from '@/hooks/useMemoryGameContract';
+import { useAccount, useReadContract, useWriteContract, useWaitForTransactionReceipt } from 'wagmi';
+import { contractConfig } from '@/lib/config';
 import { formatEther } from 'viem';
+import { useEffect } from 'react';
 
 type ClaimRewardProps = {
   userScore: number;
+  difficulty: number;
 };
 
-export function ClaimReward({ userScore }: ClaimRewardProps) {
-  const { address } = useAccount();
-  const { data: minScore, isLoading: isLoadingMinScore } = useReadMemoryGame("minScoreForReward");
-  const { data: rewardAmount, isLoading: isLoadingReward } = useReadMemoryGame("rewardAmount");
-  const { data: hasClaimed, isLoading: isLoadingClaimStatus } = useReadMemoryGame("hasClaimedReward", [address]);
+export function ClaimReward({ userScore, difficulty }: ClaimRewardProps) {
+  // ✨ Ambil isConnected dan address di paling atas
+  const { address, isConnected } = useAccount();
 
-  const { execute: claimReward, isPending, isConfirmed } = useWriteMemoryGame("claimReward", () => {
-    // Optionally refetch claim status after transaction
+  // ✨ KUNCI PERBAIKAN: JIKA TIDAK KONEK ATAU ADDRESS BELUM ADA, JANGAN LANJUTKAN ✨
+  // Ini memberitahu TypeScript bahwa semua kode di bawah ini PASTI memiliki 'address'.
+  if (!isConnected || !address) {
+    return <p className="text-gray-500 mt-4">Connect your wallet to see reward status.</p>;
+  }
+
+  // Semua hook di bawah ini sekarang dijamin aman karena 'address' pasti ada.
+  const { data: minScore } = useReadContract({ 
+    ...contractConfig, 
+    functionName: 'minScoreForReward' 
   });
+
+  const { data: rewardAmount } = useReadContract({ 
+    ...contractConfig, 
+    functionName: 'rewardAmounts', 
+    args: [difficulty] 
+  });
+
+  // Kita tidak lagi butuh 'enabled: !!address' karena sudah di-handle di atas
+  const { data: hasClaimed, refetch } = useReadContract({ 
+    ...contractConfig, 
+    functionName: 'hasClaimedReward', 
+    args: [address, difficulty],
+  });
+
+  const { data: hash, writeContract, isPending } = useWriteContract();
+  const { isSuccess: isConfirmed } = useWaitForTransactionReceipt({ hash });
+
+  useEffect(() => {
+    if (isConfirmed) {
+      refetch();
+    }
+  }, [isConfirmed, refetch]);
 
   const canClaim = !hasClaimed && userScore >= (minScore as bigint || 0);
 
-  if (!address || isLoadingMinScore || isLoadingReward || isLoadingClaimStatus) {
-    return <div className="text-gray-400">Loading reward status...</div>;
+  if (userScore < (minScore as bigint || 0)) {
+    return null;
   }
   
   if (hasClaimed) {
-    return <p className="text-green-400">You have already claimed your reward!</p>;
-  }
-
-  if (userScore < (minScore as bigint || 0)) {
-    return <p className="text-yellow-500">Your score of {userScore} is not high enough for a reward. You need at least {minScore?.toString()}.</p>;
+    return <p className="text-green-400 mt-4">Reward for this difficulty has been claimed!</p>;
   }
 
   return (
     <div className="mt-4 border-t border-gray-600 pt-4">
       <h3 className="text-xl font-semibold">Reward Available!</h3>
-      <p>Your score qualifies you to claim a reward of <span className="font-bold text-yellow-400">{formatEther(rewardAmount as bigint || BigInt(0))} ETH</span>.</p>
+      <p>
+        Claim your reward of <span className="font-bold text-yellow-400">{formatEther(rewardAmount as bigint || BigInt(0))} ETH</span> 
+        for completing {difficulty === 0 ? 'Easy' : difficulty === 1 ? 'Medium' : 'Hard'} difficulty.
+      </p>
       <button
-        onClick={() => claimReward()}
+        onClick={() => writeContract({ ...contractConfig, functionName: 'claimReward', args: [difficulty] })}
         disabled={!canClaim || isPending || isConfirmed}
         className="mt-2 bg-green-600 hover:bg-green-700 disabled:bg-gray-500 text-white font-bold py-2 px-4 rounded transition-colors"
       >
-        {isPending ? 'Claiming...' : isConfirmed ? 'Reward Claimed!' : 'Claim Reward'}
+        {isPending ? 'Claiming...' : isConfirmed ? 'Claimed!' : 'Claim Reward'}
       </button>
     </div>
   );
