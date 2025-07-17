@@ -3,7 +3,7 @@ pragma solidity ^0.8.20;
 
 import "@openzeppelin/contracts/access/Ownable.sol";
 
-contract MemoryGame is Ownable {
+contract SomniaMemory is Ownable {
     
     enum Difficulty { Easy, Medium, Hard }
 
@@ -37,11 +37,10 @@ contract MemoryGame is Ownable {
     }
 
     function play() external payable {
-        require(msg.value == playFee, "MemoryGame: Incorrect play fee.");
+        require(msg.value == playFee, "SomniaMemory: Incorrect play fee.");
         emit PaymentReceived(msg.sender, msg.value);
     }
 
-    // ✨ PERBAIKAN: Hapus parameter _difficulty yang tidak digunakan
     function submitScore(uint256 _score) external {
         totalScore[msg.sender] += _score;
         if (!isPlayer[msg.sender]) {
