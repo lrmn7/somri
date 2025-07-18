@@ -3,7 +3,7 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
-import '@rainbow-me/rainbowkit/styles.css';
+import "@rainbow-me/rainbowkit/styles.css";
 import dynamic from "next/dynamic";
 
 const inter = Inter({ subsets: ["latin"] });
@@ -11,7 +11,8 @@ const inter = Inter({ subsets: ["latin"] });
 export const metadata: Metadata = {
   title: "SOMRI",
   description: "Just flip, match, and have fun! Rewards will follow!",
-  keywords: "Somnia, Somnia Network, Testnet, Faucet, ERC20, ERC721, Multi-sender, Blockchain Tools, dApp, Web3, Smart Contract Deployment, Test Tokens, Crypto",
+  keywords:
+    "Somnia, Somnia Network, Testnet, Faucet, ERC20, ERC721, Multi-sender, Blockchain Tools, dApp, Web3, Smart Contract Deployment, Test Tokens, Crypto",
   authors: [{ name: "L RMN", url: "https://lrmn.link" }],
   creator: "L RMN",
   publisher: "L RMN",
@@ -62,7 +63,9 @@ export const metadata: Metadata = {
   },
 };
 
-const ClientOnlyProviders = dynamic(() => import("@/app/providers-client"), { ssr: false });
+const ClientOnlyProviders = dynamic(() => import("@/app/providers-client"), {
+  ssr: false,
+});
 
 export default function RootLayout({
   children,
