@@ -471,6 +471,17 @@ export default function HomePage() {
                         <p className="text-brand-orange mb-2 font-semibold">
                           ✅ Score Submitted!
                         </p>{" "}
+                        <p className="mb-2 font-medium text-sm">
+                          EXPLORE{" "}
+                          <a
+                            href="https://somnia.network/ecosystem"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="text-white underline text-sm"
+                          >
+                            SOMNIA ECOSYSTEM
+                          </a>
+                        </p>
                         <ClaimReward
                           userScore={finalScore}
                           difficulty={difficulty}
