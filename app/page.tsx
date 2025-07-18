@@ -104,9 +104,9 @@ const difficultySettings = {
   },
 };
 const scoreSettings = {
-  [Difficulty.Easy]:   { maxScore: 1500, timePenalty: 5,  attemptPenalty: 25 },
+  [Difficulty.Easy]: { maxScore: 1500, timePenalty: 5, attemptPenalty: 25 },
   [Difficulty.Medium]: { maxScore: 2500, timePenalty: 10, attemptPenalty: 50 },
-  [Difficulty.Hard]:   { maxScore: 4100, timePenalty: 20, attemptPenalty: 75 },
+  [Difficulty.Hard]: { maxScore: 4100, timePenalty: 20, attemptPenalty: 75 },
 };
 const createShuffledDeck = (pairCount: number): CardType[] => {
   const shuffledImages = [...cardImages].sort(() => 0.5 - Math.random());
