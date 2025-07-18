@@ -66,7 +66,7 @@ export function ClaimReward({ userScore, difficulty }: ClaimRewardProps) {
       <p>
         Claim your reward of{" "}
         <span className="font-bold text-yellow-400">
-          {formatEther((rewardAmount as bigint) || BigInt(0))} STT
+          {formatEther((rewardAmount as bigint) || BigInt(0))} STT{" "}
         </span>
         for completing{" "}
         {difficulty === 0 ? "Easy" : difficulty === 1 ? "Medium" : "Hard"}{" "}

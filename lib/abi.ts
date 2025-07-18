@@ -5,10 +5,42 @@ export const memoryGameABI = [
           "internalType": "uint256",
           "name": "_initialMinScore",
           "type": "uint256"
+        },
+        {
+          "internalType": "address",
+          "name": "_initialSigner",
+          "type": "address"
         }
       ],
       "stateMutability": "nonpayable",
       "type": "constructor"
+    },
+    {
+      "inputs": [],
+      "name": "ECDSAInvalidSignature",
+      "type": "error"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "length",
+          "type": "uint256"
+        }
+      ],
+      "name": "ECDSAInvalidSignatureLength",
+      "type": "error"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "bytes32",
+          "name": "s",
+          "type": "bytes32"
+        }
+      ],
+      "name": "ECDSAInvalidSignatureS",
+      "type": "error"
     },
     {
       "inputs": [
@@ -120,7 +152,7 @@ export const memoryGameABI = [
       "inputs": [
         {
           "indexed": false,
-          "internalType": "enum MemoryGame.Difficulty",
+          "internalType": "enum SomniaMemory.Difficulty",
           "name": "difficulty",
           "type": "uint8"
         },
@@ -151,7 +183,7 @@ export const memoryGameABI = [
         },
         {
           "indexed": false,
-          "internalType": "enum MemoryGame.Difficulty",
+          "internalType": "enum SomniaMemory.Difficulty",
           "name": "difficulty",
           "type": "uint8"
         }
@@ -188,6 +220,19 @@ export const memoryGameABI = [
       "anonymous": false,
       "inputs": [
         {
+          "indexed": false,
+          "internalType": "address",
+          "name": "newSigner",
+          "type": "address"
+        }
+      ],
+      "name": "SignerAddressSet",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
           "indexed": true,
           "internalType": "address",
           "name": "to",
@@ -210,7 +255,7 @@ export const memoryGameABI = [
     {
       "inputs": [
         {
-          "internalType": "enum MemoryGame.Difficulty",
+          "internalType": "enum SomniaMemory.Difficulty",
           "name": "_difficulty",
           "type": "uint8"
         }
@@ -259,7 +304,7 @@ export const memoryGameABI = [
           "type": "address"
         },
         {
-          "internalType": "enum MemoryGame.Difficulty",
+          "internalType": "enum SomniaMemory.Difficulty",
           "name": "",
           "type": "uint8"
         }
@@ -350,7 +395,7 @@ export const memoryGameABI = [
     {
       "inputs": [
         {
-          "internalType": "enum MemoryGame.Difficulty",
+          "internalType": "enum SomniaMemory.Difficulty",
           "name": "",
           "type": "uint8"
         }
@@ -395,7 +440,7 @@ export const memoryGameABI = [
     {
       "inputs": [
         {
-          "internalType": "enum MemoryGame.Difficulty",
+          "internalType": "enum SomniaMemory.Difficulty",
           "name": "_difficulty",
           "type": "uint8"
         },
@@ -413,9 +458,45 @@ export const memoryGameABI = [
     {
       "inputs": [
         {
+          "internalType": "address",
+          "name": "_newSigner",
+          "type": "address"
+        }
+      ],
+      "name": "setSignerAddress",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "signerAddress",
+      "outputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
           "internalType": "uint256",
           "name": "_score",
           "type": "uint256"
+        },
+        {
+          "internalType": "uint256",
+          "name": "_nonce",
+          "type": "uint256"
+        },
+        {
+          "internalType": "bytes",
+          "name": "_signature",
+          "type": "bytes"
         }
       ],
       "name": "submitScore",

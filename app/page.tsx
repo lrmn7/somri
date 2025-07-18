@@ -104,9 +104,9 @@ const difficultySettings = {
   },
 };
 const scoreSettings = {
-  [Difficulty.Easy]: { maxScore: 500, timePenalty: 2, attemptPenalty: 10 },
-  [Difficulty.Medium]: { maxScore: 1000, timePenalty: 5, attemptPenalty: 15 },
-  [Difficulty.Hard]: { maxScore: 1500, timePenalty: 9, attemptPenalty: 20 },
+  [Difficulty.Easy]:   { maxScore: 1500, timePenalty: 5,  attemptPenalty: 25 },
+  [Difficulty.Medium]: { maxScore: 2500, timePenalty: 10, attemptPenalty: 50 },
+  [Difficulty.Hard]:   { maxScore: 4100, timePenalty: 20, attemptPenalty: 75 },
 };
 const createShuffledDeck = (pairCount: number): CardType[] => {
   const shuffledImages = [...cardImages].sort(() => 0.5 - Math.random());
@@ -150,8 +150,9 @@ export default function HomePage() {
   const [attempts, setAttempts] = useState(0);
   const [finalScore, setFinalScore] = useState(0);
   const [elapsedTime, setElapsedTime] = useState(0);
+  const [isSubmittingSignature, setIsSubmittingSignature] = useState(false);
 
-  const { isConnected } = useAccount();
+  const { isConnected, address } = useAccount();
   const {
     data: payHash,
     writeContract: payToPlay,
@@ -164,10 +165,12 @@ export default function HomePage() {
     isPending: isSubmitting,
     reset: resetSubmitScore,
   } = useWriteContract();
+
   const { isLoading: isConfirmingPayment, isSuccess: hasPaid } =
     useWaitForTransactionReceipt({ hash: payHash });
   const { isLoading: isConfirmingScore, isSuccess: isSubmitted } =
     useWaitForTransactionReceipt({ hash: scoreHash });
+
   const playSound = (sound: "flip" | "match" | "win" | "miss") => {
     const audio = new Audio(`/sounds/${sound}.mp3`);
     audio.volume = 0.3;
@@ -176,11 +179,9 @@ export default function HomePage() {
 
   useEffect(() => {
     setIsMounted(true);
-    const handleResize = () => {
-      setIsMobile(window.innerWidth < 768); // Adjust breakpoint as needed for mobile
-    };
+    const handleResize = () => setIsMobile(window.innerWidth < 768);
     window.addEventListener("resize", handleResize);
-    handleResize(); // Set initial value
+    handleResize();
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
@@ -210,7 +211,7 @@ export default function HomePage() {
       ? difficultySettings[Difficulty.Easy].pairs.mobile
       : difficultySettings[Difficulty.Easy].pairs.desktop;
     setCards(createShuffledDeck(initialPairCount));
-  }, [isMobile]); // Re-shuffle on mobile state change
+  }, [isMobile]);
 
   useEffect(() => {
     if (hasPaid) {
@@ -261,6 +262,7 @@ export default function HomePage() {
     const firstCard = cards.find((c) => c.uniqueId === firstId);
     const secondCard = cards.find((c) => c.uniqueId === secondId);
     if (!firstCard || !secondCard) return;
+
     const checkTimeout = setTimeout(() => {
       setAttempts((prev) => prev + 1);
       if (firstCard.id === secondCard.id) {
@@ -309,9 +311,42 @@ export default function HomePage() {
     }
   }, [cards, gamePhase, elapsedTime, attempts, difficulty]);
 
-  if (!isMounted) {
-    return null;
-  }
+  const handleScoreSubmission = async () => {
+    if (!address) {
+      toast.error("Wallet not connected!");
+      return;
+    }
+    setIsSubmittingSignature(true);
+    toast.loading("Requesting signature...");
+    try {
+      const response = await fetch("/api/sign-score", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ userAddress: address, score: finalScore }),
+      });
+      const data = await response.json();
+      if (!response.ok || data.error)
+        throw new Error(data.error || "Failed to get signature.");
+
+      const { signature, nonce } = data;
+      toast.dismiss();
+
+      submitScore({
+        ...contractConfig,
+        functionName: "submitScore",
+        args: [BigInt(finalScore), BigInt(nonce), signature],
+      });
+    } catch (error) {
+      toast.dismiss();
+      toast.error(
+        error instanceof Error ? error.message : "An unknown error occurred"
+      );
+    } finally {
+      setIsSubmittingSignature(false);
+    }
+  };
+
+  if (!isMounted) return null;
 
   return (
     <div className="w-full flex flex-col items-center px-4 mt-8 lg:mt-20">
@@ -358,11 +393,10 @@ export default function HomePage() {
               <div className="absolute inset-0 bg-black bg-opacity-50 flex flex-col items-center justify-center z-10 backdrop-blur-sm text-white p-4 text-center">
                 {!isConnected ? (
                   <>
-                    {" "}
                     <h2 className="text-2xl md:text-3xl font-bold mb-4">
                       Connect Wallet to Play
-                    </h2>{" "}
-                    <WalletButton />{" "}
+                    </h2>
+                    <WalletButton />
                   </>
                 ) : gamePhase === "difficulty_select" ? (
                   <>
@@ -408,10 +442,7 @@ export default function HomePage() {
                   </>
                 ) : gamePhase === "payment" ? (
                   <>
-                    {" "}
-                    <p className="mb-4 text-sm text-gray-400">
-                      Fee 0.001 STT
-                    </p>{" "}
+                    <p className="mb-4 text-sm text-gray-400">Fee 0.001 STT</p>
                     <button
                       onClick={() =>
                         payToPlay({
@@ -423,13 +454,12 @@ export default function HomePage() {
                       disabled={isPaying || isConfirmingPayment}
                       className="bg-brand-orange hover:bg-orange-600 disabled:bg-gray-500 font-bold px-4 py-1.5 rounded-lg text-xl"
                     >
-                      {" "}
                       {isPaying
                         ? "Confirm..."
                         : isConfirmingPayment
                         ? "Processing..."
-                        : "Ready to Play?"}{" "}
-                    </button>{" "}
+                        : "Ready to Play?"}
+                    </button>
                   </>
                 ) : gamePhase === "countdown" ? (
                   <div className="text-9xl font-bold animate-ping">
@@ -448,29 +478,27 @@ export default function HomePage() {
                     </p>
                     {!isSubmitted ? (
                       <button
-                        onClick={() =>
-                          submitScore({
-                            ...contractConfig,
-                            functionName: "submitScore",
-                            args: [BigInt(finalScore)],
-                          })
+                        onClick={handleScoreSubmission}
+                        disabled={
+                          isSubmittingSignature ||
+                          isSubmitting ||
+                          isConfirmingScore
                         }
-                        disabled={isSubmitting || isConfirmingScore}
                         className="bg-brand-orange hover:bg-brand-orange-600 disabled:bg-gray-500 font-bold px-4 py-1.5 sm:px-5 sm:py-2 rounded-lg text-lg"
                       >
-                        {" "}
-                        {isSubmitting
+                        {isSubmittingSignature
+                          ? "Submitting..."
+                          : isSubmitting
                           ? "Confirm..."
                           : isConfirmingScore
                           ? "Submitting..."
-                          : "Submit Score"}{" "}
+                          : "Submit Score"}
                       </button>
                     ) : (
                       <div className="mt-4">
-                        {" "}
                         <p className="text-brand-orange mb-2 font-semibold">
                           ✅ Score Submitted!
-                        </p>{" "}
+                        </p>
                         <p className="mb-2 font-medium text-sm">
                           EXPLORE{" "}
                           <a
@@ -485,7 +513,7 @@ export default function HomePage() {
                         <ClaimReward
                           userScore={finalScore}
                           difficulty={difficulty}
-                        />{" "}
+                        />
                       </div>
                     )}
                   </div>
@@ -506,8 +534,6 @@ export default function HomePage() {
           <h2 className="text-3xl text-brand-orange font-bold text-center mb-4">
             Leaderboard
           </h2>
-
-          {/* reward explanation */}
           <p className="text-sm text-gray-400 text-center mb-2">
             🎯 Reach at least{" "}
             <span className="font-semibold text-brand-orange">1000 points</span>{" "}
