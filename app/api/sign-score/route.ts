@@ -1,3 +1,5 @@
+export const runtime = 'edge';
+
 import { type NextRequest, NextResponse } from "next/server";
 import { privateKeyToAccount } from "viem/accounts";
 import { keccak256, encodePacked } from "viem";

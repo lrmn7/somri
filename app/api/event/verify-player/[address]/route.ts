@@ -1,3 +1,5 @@
+export const runtime = 'edge';
+
 import { NextResponse } from "next/server";
 import { createPublicClient, http, isAddress } from "viem";
 import { somniaTestnet } from "viem/chains";
