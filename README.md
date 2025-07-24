@@ -1,118 +1,36 @@
-# Web3 Memory Game DApp
+This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
-Ini adalah DApp full-stack yang dibangun dengan Next.js, RainbowKit, Wagmi v2, dan Solidity. Pemain dapat memainkan permainan memori, mengirimkan skor mereka secara on-chain, dan mengklaim hadiah STT jika skor mereka cukup tinggi.
+## Getting Started
 
-## 🚀 Fitur
+First, run the development server:
 
-- **Permainan Memori:** Permainan kartu berbasis gambar klasik.
-- **Skor On-Chain:** Skor akhir dihitung berdasarkan waktu dan upaya, lalu disimpan di blockchain.
-- **Hadiah Kripto:** Pemain yang memenuhi syarat dapat mengklaim hadiah STT.
-- **Papan Peringkat:** Menampilkan 10 pemain teratas secara on-chain.
-- **Panel Admin:** Pemilik kontrak dapat mengelola dana dan pengaturan permainan.
-- **Integrasi Web3 Modern:** Menggunakan Next.js App Router, RainbowKit, dan Wagmi v2 untuk pengalaman pengguna yang mulus.
-
-## 📦 Stack Teknologi
-
-- **Framework:** Next.js (App Router)
-- **Styling:** Tailwind CSS
-- **Interaksi Web3:** RainbowKit & Wagmi v2
-- **Smart Contract:** Solidity (^0.8.20)
-- **Bahasa:** TypeScript
-
-## 🛠️ Menjalankan Proyek Secara Lokal
-
-### Prasyarat
-
-- [Node.js](https://nodejs.org/en/) (v18 atau lebih baru)
-- [pnpm](https://pnpm.io/) (direkomendasikan) atau npm/yarn
-- Wallet browser seperti [MetaMask](https://metamask.io/)
-- STT Testnet (misalnya dari [Sepolia Faucet](https://sepoliafaucet.com/))
-
-### Langkah 1: Deploy Smart Contract
-
-1.  **Siapkan Lingkungan Hardhat/Foundry:**
-    Proyek ini tidak menyertakan file konfigurasi Hardhat. Anda perlu menyiapkannya secara terpisah.
-
-    - Instal Hardhat: `pnpm add --save-dev hardhat @nomicfoundation/hardhat-toolbox`
-    - Jalankan `npx hardhat` dan buat proyek TypeScript.
-    - Pindahkan `contracts/MemoryGame.sol` ke direktori `contracts` Hardhat Anda.
-    - Instal kontrak OpenZeppelin: `pnpm add @openzeppelin/contracts`.
-
-2.  **Buat Skrip Deploy:**
-    Buat file di `scripts/deploy.ts` dalam proyek Hardhat Anda:
-    ```typescript
-    import { buildModule } from "@nomicfoundation/hardhat-ignition/modules";
-
-const SomniaMemoryModule = buildModule("SomniaMemoryModule", (m) => {
-const initialMinScore = m.getParameter("\_initialMinScore", 1000);
-const SomniaMemory = m.contract("SomniaMemory", [initialMinScore]);
-
-return { SomniaMemory };
-});
-
-export default SomniaMemoryModule;
+```bash
+npm run dev
+# or
+yarn dev
+# or
+pnpm dev
+# or
+bun dev
 ```
 
-3.  **Deploy ke Testnet:**
+Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-    - Konfigurasikan file `hardhat.config.ts` Anda dengan URL RPC testnet dan private key deployer.
-    - Jalankan skrip deploy: `npx hardhat run scripts/deploy.ts --network sepolia` (ganti `sepolia` dengan jaringan Anda).
+You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
 
-4.  **Dapatkan ABI:**
-    Setelah kompilasi (`npx hardhat compile`), ABI akan dibuat di `artifacts/contracts/MemoryGame.sol/MemoryGame.json`. Salin konten array `abi` dari file ini.
+This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
 
-### Langkah 2: Konfigurasi Frontend
+## Learn More
 
-1.  **Clone Repositori:**
+To learn more about Next.js, take a look at the following resources:
 
-    ```bash
-    git clone <URL_REPO_ANDA>
-    cd <NAMA_REPO>
-    ```
+- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
+- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
 
-2.  **Instal Dependensi:**
+You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
 
-    ```bash
-    pnpm install
-    ```
+## Deploy on Vercel
 
-3.  **Salin ABI:**
-    Tempel ABI yang Anda salin dari Hardhat ke dalam file `lib/abi.ts`.
+The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
-4.  **Siapkan Variabel Lingkungan:**
-    - Buat file `.env.local` dengan menyalin dari `.env.example`.
-    - `NEXT_PUBLIC_CONTRACT_ADDRESS`: Isi dengan alamat kontrak yang Anda deploy.
-    - `NEXT_PUBLIC_CHAIN_ID`: ID chain tempat Anda deploy (misalnya `11155111` untuk Sepolia).
-    - `NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID`: Dapatkan ID proyek dari [WalletConnect Cloud](https://cloud.walletconnect.com/).
-
-### Langkah 3: Jalankan Aplikasi
-
-1.  **Jalankan Server Development:**
-
-    ```bash
-    pnpm dev
-    ```
-
-2.  **Buka di Browser:**
-    Buka [http://localhost:3000](http://localhost:3000) di browser Anda.
-
-### Langkah 4: Interaksi dengan DApp
-
-1.  **Danai Kontrak (Sebagai Owner):**
-
-    - Buka halaman `/admin`.
-    - Hubungkan dengan wallet yang sama dengan yang Anda gunakan untuk deploy (wallet owner).
-    - Gunakan form "Deposit" untuk mengirim STT testnet ke kontrak. Dana ini akan digunakan untuk hadiah.
-
-2.  **Mainkan Game:**
-
-    - Buka halaman `/play`.
-    - Selesaikan permainan. Jika skor Anda cukup tinggi, Anda akan melihat opsi untuk mengklaim hadiah.
-
-3.  **Klaim Hadiah:**
-
-    - Klik tombol "Submit Score".
-    - Jika skor Anda memenuhi syarat, klik tombol "Claim Reward".
-
-4.  **Lihat Papan Peringkat:**
-    - Buka halaman `/leaderboard` untuk melihat skor teratas.
+Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.

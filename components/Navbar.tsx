@@ -10,8 +10,6 @@ export function Navbar() {
     <header className="sticky top-0 z-50 w-full border-b border-gray-700 bg-gray-900 backdrop-blur-sm">
       <nav className="container mx-auto flex h-16 items-center justify-between px-4">
         <div className="flex items-center">
-          
-          {/* Tautan untuk Ikon Twitter (Hanya tampil di mobile) */}
           <Link
             href="https://twitter.com/romanromannya"
             target="_blank"
@@ -21,8 +19,6 @@ export function Navbar() {
           >
             <FaXTwitter size={32} />
           </Link>
-
-          {/* Tautan untuk Logo (Hanya tampil di desktop) */}
           <Link
             href="/"
             className="hidden md:flex items-center"
@@ -39,7 +35,6 @@ export function Navbar() {
         </div>
 
         <div className="flex items-center gap-4">
-          {/* Tautan untuk Ikon Twitter (Hanya tampil di desktop, di sisi kanan) */}
           <Link
             href="https://twitter.com/romanromannya"
             target="_blank"

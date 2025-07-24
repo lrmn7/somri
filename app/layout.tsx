@@ -17,7 +17,7 @@ export const metadata: Metadata = {
   creator: "L RMN",
   publisher: "L RMN",
   alternates: {
-    canonical: "https://somri.vercel.app/",
+    canonical: "https://somri.lrmn.link/",
   },
   icons: {
     icon: "/somri.png",
@@ -27,11 +27,11 @@ export const metadata: Metadata = {
   openGraph: {
     title: "SOMNIA MEMORY GAME",
     description: "Just flip, match, and have fun! Rewards will follow!",
-    url: "https://somri.vercel.app/",
+    url: "https://somri.lrmn.link/",
     siteName: "SOMRI",
     images: [
       {
-        url: "https://somri.vercel.app/somri-og.png",
+        url: "https://somri.lrmn.link/somri-og.png",
         width: 1200,
         height: 630,
         alt: "SOMRI - SOMNIA MEMORY GAME",
@@ -46,8 +46,7 @@ export const metadata: Metadata = {
     creator: "@romanromannya",
     title: "SOMRI: Just flip, match, and have fun! Rewards will follow!",
     description: "Just flip, match, and have fun! Rewards will follow!",
-    // ✨ URL gambar diperbarui
-    images: ["https://somri.vercel.app/somri-og.png"],
+    images: ["https://somri.lrmn.link/somri-og.png"],
   },
   robots: {
     index: true,

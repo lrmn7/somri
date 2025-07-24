@@ -64,7 +64,6 @@ export function Card({
         variants={cardVariants}
         animate={getAnimationState()}
       >
-        {/* Card Back hanya ditampilkan jika belum matched */}
         {!isMatched && (
           <div className="absolute w-full h-full [backface-visibility:hidden]">
             <Image
@@ -76,7 +75,6 @@ export function Card({
           </div>
         )}
 
-        {/* Card Front */}
         <div className="absolute w-full h-full [backface-visibility:hidden] [transform:rotateY(180deg)]">
           <Image
             src={imageUrl}

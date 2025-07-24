@@ -142,7 +142,6 @@ export function AdminPanel() {
         </p>
       )}
 
-      {/* Tampilan status */}
       <div className="grid grid-cols-2 md:grid-cols-3 gap-4 text-center">
         <div className="bg-gray-700 p-4 rounded-lg">
           <p className="text-sm text-gray-400">Balance</p>
@@ -192,7 +191,6 @@ export function AdminPanel() {
         </div>
       </div>
 
-      {/* Panel Aksi */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
         <div className="space-y-4 bg-gray-900/50 p-4 rounded-lg">
           <h3 className="text-xl font-semibold">Game Settings</h3>
