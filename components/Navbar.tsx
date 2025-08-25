@@ -3,7 +3,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { WalletButton } from "./WalletButton";
-import { FaGithub, FaXTwitter } from "react-icons/fa6";
+import { FaDiscord, FaXTwitter } from "react-icons/fa6";
 
 export function Navbar() {
   return (
@@ -11,13 +11,13 @@ export function Navbar() {
       <nav className="container mx-auto flex h-16 items-center justify-between px-4">
         <div className="flex items-center">
           <Link
-            href="https://twitter.com/romanromannya"
+            href="https://discord.com/invite/9HkKkkA9Jt"
             target="_blank"
             rel="noopener noreferrer"
             className="block md:hidden text-brand-orange"
-            aria-label="Twitter Profile"
+            aria-label="Discord Community"
           >
-            <FaXTwitter size={32} />
+            <FaDiscord size={32} />
           </Link>
           <Link
             href="/"
@@ -36,13 +36,13 @@ export function Navbar() {
 
         <div className="flex items-center gap-4">
           <Link
-            href="https://twitter.com/romanromannya"
+            href="https://discord.com/invite/9HkKkkA9Jt"
             target="_blank"
             rel="noopener noreferrer"
             className="text-brand-orange hover:text-white transition-colors hidden md:block"
-            aria-label="Twitter Profile"
+            aria-label="Discord Community"
           >
-            <FaXTwitter size={40} />
+            <FaDiscord size={40} />
           </Link>
 
           <WalletButton />
